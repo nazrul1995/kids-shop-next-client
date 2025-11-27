@@ -6,7 +6,7 @@ import Sidebar from "./component/Sidebar";
 export default function Dashboard() {
   return (
     <div className="flex">
-      <Sidebar />
+      <Sidebar/>
 
       <div className="ml-64 w-full p-6">
         <h1 className="text-3xl font-bold text-pink-600">Welcome Seller 🎉</h1>
