@@ -9,7 +9,7 @@ export default function AddProduct() {
     price: "",
     quantity: "",
     pictureURL: "",
-    sellerEmail: "seller@mail.com" // Dynamic করলে auth দিয়ে হবে
+    sellerEmail: "seller@mail.com" 
   });
 
   const handleSubmit = async (e) => {
