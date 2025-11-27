@@ -9,7 +9,7 @@ export default function MyProducts() {
   const sellerEmail = "seller@mail.com"; // auth হলে dynamic
 
   useEffect(() => {
-    fetch(`http://localhost:5000/my-posted-products?email=${sellerEmail}`)
+    fetch(`https://kids-shop-project.vercel.app/my-posted-products?email=${sellerEmail}`)
       .then((r) => r.json())
       .then(setProducts);
   }, []);
@@ -17,7 +17,7 @@ export default function MyProducts() {
   const handleDelete = async (id) => {
     if (!confirm("Delete this product?")) return;
 
-    await fetch(`http://localhost:5000/deleteJob/${id}`, {
+    await fetch(`https://kids-shop-project.vercel.app/deleteJob/${id}`, {
       method: "DELETE",
     });
 

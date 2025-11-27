@@ -14,7 +14,7 @@ export default function Testimonials() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/testimonials")
+    fetch("https://kids-shop-project.vercel.app/testimonials")
       .then((r) => r.json())
       .then(setData);
   }, []);
