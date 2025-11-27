@@ -1,4 +1,3 @@
-"use client"
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/Components/Footer";
@@ -16,10 +15,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// export const metadata = {
-//   title: "Lens Coaching",
-//   description: "Renowned coaching in chittagong",
-// };
+export const metadata = {
+  title: "Lens Coaching",
+  description: "Renowned coaching in chittagong",
+};
 
 export default function RootLayout({ children }) {
   return (

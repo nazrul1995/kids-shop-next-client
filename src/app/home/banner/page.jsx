@@ -47,7 +47,7 @@ export default function Banner() {
                 Discover the magic of play with creative, safe, and colorful toys made with love!
               </p>
               <Link
-                href={"/products"}
+                href={"/allProducts"}
                 className="mt-8 bg-linear-to-r from-pink-500 to-yellow-400 text-white font-semibold rounded-full px-8 py-3 shadow-lg hover:from-pink-600 hover:to-yellow-500 transition-transform transform hover:scale-105"
               >
                 Explore Toys
@@ -75,7 +75,7 @@ export default function Banner() {
                 Let your kids explore creativity with safe, eco-friendly, and imaginative toys.
               </p>
               <Link
-                href="/category/1"
+                href="/allProducts"
                 className="mt-8 bg-linear-to-r from-blue-500 to-pink-500 text-white font-semibold rounded-full px-8 py-3 shadow-lg hover:from-blue-600 hover:to-pink-600 transition-transform transform hover:scale-105"
               >
                 Browse Categories
@@ -103,7 +103,7 @@ export default function Banner() {
                 Bright colors, happy faces, and endless imagination — that’s the ToyLand spirit!
               </p>
               <Link
-                href="/products"
+                href="/allProducts"
                 className="mt-8 bg-linear-to-r from-yellow-400 to-pink-500 text-white font-semibold rounded-full px-8 py-3 shadow-lg hover:from-yellow-500 hover:to-pink-600 transition-transform transform hover:scale-105"
               >
                 Shop Now

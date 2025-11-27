@@ -1,3 +1,5 @@
+'use client'
+
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import { AuthContext } from "../AuthContext/AuthContext";
 import { useEffect, useState } from "react";

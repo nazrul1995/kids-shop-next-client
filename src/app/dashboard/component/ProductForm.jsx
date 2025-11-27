@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import { AuthContext } from "./Provider/AuthContext/AuthContext";
 
@@ -8,11 +8,10 @@ export default function AddProduct() {
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
 
-  // Initialize form without _id
   const [form, setForm] = useState({
     toyName: "",
     sellerName: "",
-    sellerEmail: user?.email || "",
+    sellerEmail: "",
     price: "",
     rating: "",
     availableQuantity: "",
@@ -23,26 +22,34 @@ export default function AddProduct() {
     age: "",
   });
 
+  useEffect(() => {
+    if (user?.email) {
+      setForm((prev) => ({
+        ...prev,
+        sellerEmail: user.email,
+        sellerName: user.displayName || "", 
+      }));
+    }
+  }, [user]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const res = await fetch(
-        "http://localhost:5000/add-product",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        }
-      );
+      const res = await fetch("https://kids-shop-next-server.vercel.app/add-product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
       if (!res.ok) throw new Error("Failed to add product");
 
-      alert("🎉 Product Added Successfully!");
+      alert("Product Added Successfully!");
+      
       setForm({
         toyName: "",
-        sellerName: "",
+        sellerName: user?.displayName || "",
         sellerEmail: user?.email || "",
         price: "",
         rating: "",
@@ -54,7 +61,7 @@ export default function AddProduct() {
         age: "",
       });
     } catch (err) {
-      alert("❌ Error adding product: " + err.message);
+      alert("Error adding product: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -66,7 +73,7 @@ export default function AddProduct() {
 
       <div className="ml-64 w-full p-10">
         <h2 className="text-3xl font-bold mb-8 text-pink-600">
-          ➕ Add New Product
+          Add New Product
         </h2>
 
         <form
@@ -93,25 +100,25 @@ export default function AddProduct() {
               type="text"
               required
               value={form.sellerName}
-              onChange={(e) =>
-                setForm({ ...form, sellerName: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, sellerName: e.target.value })}
               className="input input-bordered w-full mt-1"
-              placeholder="Enter seller name"
+              placeholder="Your name"
             />
           </div>
 
-          {/* Seller Email (readonly) */}
+          {/* Seller Email - Auto Filled & Readonly */}
           <div>
             <label className="font-semibold text-gray-600">Seller Email</label>
             <input
               type="email"
               value={form.sellerEmail}
               readOnly
-              className="input input-bordered w-full mt-1 bg-gray-100"
+              className="input input-bordered w-full mt-1 bg-gray-100 cursor-not-allowed"
+              placeholder="Login to auto-fill email"
             />
           </div>
 
+       
           {/* Category */}
           <div>
             <label className="font-semibold text-gray-600">Category</label>
@@ -121,11 +128,10 @@ export default function AddProduct() {
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
               className="input input-bordered w-full mt-1"
-              placeholder="Enter category"
+              placeholder="e.g., Educational, Doll, Car"
             />
           </div>
 
-          {/* Price */}
           <div>
             <label className="font-semibold text-gray-600">Price (৳)</label>
             <input
@@ -138,7 +144,6 @@ export default function AddProduct() {
             />
           </div>
 
-          {/* Rating */}
           <div>
             <label className="font-semibold text-gray-600">Rating</label>
             <input
@@ -148,44 +153,33 @@ export default function AddProduct() {
               min="0"
               max="5"
               value={form.rating}
-              onChange={(e) =>
-                setForm({ ...form, rating: Number(e.target.value) })
-              }
+              onChange={(e) => setForm({ ...form, rating: Number(e.target.value) })}
               className="input input-bordered w-full mt-1"
-              placeholder="Enter rating (0-5)"
+              placeholder="0 to 5"
             />
           </div>
 
-          {/* Available Quantity */}
           <div>
             <label className="font-semibold text-gray-600">Available Quantity</label>
             <input
               type="number"
               required
               value={form.availableQuantity}
-              onChange={(e) =>
-                setForm({ ...form, availableQuantity: Number(e.target.value) })
-              }
+              onChange={(e) => setForm({ ...form, availableQuantity: Number(e.target.value) })}
               className="input input-bordered w-full mt-1"
-              placeholder="Enter available quantity"
             />
           </div>
 
-          {/* Sold Quantity */}
           <div>
             <label className="font-semibold text-gray-600">Sold Quantity</label>
             <input
               type="number"
               value={form.soldQuantity}
-              onChange={(e) =>
-                setForm({ ...form, soldQuantity: Number(e.target.value) })
-              }
+              onChange={(e) => setForm({ ...form, soldQuantity: Number(e.target.value) })}
               className="input input-bordered w-full mt-1"
-              placeholder="Enter sold quantity"
             />
           </div>
 
-          {/* Age */}
           <div>
             <label className="font-semibold text-gray-600">Age Range</label>
             <input
@@ -193,11 +187,10 @@ export default function AddProduct() {
               value={form.age}
               onChange={(e) => setForm({ ...form, age: e.target.value })}
               className="input input-bordered w-full mt-1"
-              placeholder="Enter age range (e.g., 2-6 years)"
+              placeholder="e.g., 3-8 years"
             />
           </div>
 
-          {/* Image URL */}
           <div>
             <label className="font-semibold text-gray-600">Image URL</label>
             <input
@@ -206,11 +199,10 @@ export default function AddProduct() {
               value={form.pictureURL}
               onChange={(e) => setForm({ ...form, pictureURL: e.target.value })}
               className="input input-bordered w-full mt-1"
-              placeholder="Paste image URL"
+              placeholder="https://example.com/toy.jpg"
             />
           </div>
 
-          {/* Description */}
           <div className="md:col-span-2">
             <label className="font-semibold text-gray-600">Description</label>
             <textarea
@@ -218,17 +210,16 @@ export default function AddProduct() {
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               className="textarea textarea-bordered w-full mt-1"
-              placeholder="Write product description..."
               rows={4}
-            ></textarea>
+              placeholder="Describe the toy..."
+            />
           </div>
 
-          {/* Submit Button */}
           <button
-            disabled={loading}
-            className="btn bg-pink-500 hover:bg-pink-600 text-white text-lg md:col-span-2"
+            disabled={loading || !form.sellerEmail} 
+            className="btn bg-pink-500 hover:bg-pink-600 text-white text-lg md:col-span-2 disabled:opacity-50"
           >
-            {loading ? "Adding..." : "Add Product ➕"}
+            {loading ? "Adding..." : "Add Product"}
           </button>
         </form>
       </div>

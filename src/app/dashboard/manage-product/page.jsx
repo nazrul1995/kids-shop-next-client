@@ -5,8 +5,7 @@ import { AuthContext } from "../component/Provider/AuthContext/AuthContext";
 import Image from "next/image";
 import Sidebar from "../component/Sidebar";
 import Swal from "sweetalert2";
-
-
+import Link from "next/link";
 
 export default function ManageProduct() {
   const { user } = useContext(AuthContext);
@@ -14,14 +13,13 @@ export default function ManageProduct() {
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(null);
 
-  // Fetch user's posted products
   const fetchMyProducts = async () => {
     if (!user?.email) return;
 
     try {
       setLoading(true);
       const res = await fetch(
-        `http://localhost:5000/my-posted-products?email=${user.email}`
+        `https://kids-shop-next-server.vercel.app/my-posted-products?email=${user.email}`
       );
       const data = await res.json();
       setProducts(data);
@@ -36,7 +34,6 @@ export default function ManageProduct() {
     fetchMyProducts();
   }, [user]);
 
-  // Delete Product
   const handleDelete = async (id) => {
     const confirm = await Swal.fire({
       title: "Are you sure?",
@@ -52,30 +49,20 @@ export default function ManageProduct() {
 
     try {
       setDeleting(id);
-      const res = await fetch(`http://localhost:5000/deleteProduct/${id}`, {
+      const res = await fetch(`https://kids-shop-next-server.vercel.app/deleteProduct/${id}`, {
         method: "DELETE",
       });
-
       const result = await res.json();
 
       if (result.deletedCount > 0) {
         setProducts(products.filter((p) => p._id !== id));
         Swal.fire("Deleted!", "Product has been deleted.", "success");
-      } else {
-        Swal.fire("Failed", "Could not delete the product.", "error");
       }
     } catch (err) {
       Swal.fire("Error", "Something went wrong!", "error");
     } finally {
       setDeleting(null);
     }
-  };
-
-  // Edit redirect (you can make a separate EditProduct page later)
-  const handleEdit = (id) => {
-    // For now, just alert. You can redirect to /update-product/${id}
-    Swal.fire("Coming Soon", "Edit functionality will be added soon!", "info");
-    // Or navigate: router.push(`/update-product/${id}`)
   };
 
   return (
@@ -93,13 +80,12 @@ export default function ManageProduct() {
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-3xl shadow-xl">
-            <p className="text-2xl text-gray-500">You haven!t added any products yet.</p>
-            <button
-              onClick={() => window.location.href = "/dashboard/add-product"}
-              className="mt-6 btn bg-pink-500 hover:bg-pink-600 text-white"
-            >
-              Add Your First Product
-            </button>
+            <p className="text-2xl text-gray-500">You haven t added any products yet.</p>
+            <Link href="/dashboard/add-product">
+              <button className="mt-6 btn bg-pink-500 hover:bg-pink-600 text-white">
+                Add Your First Product
+              </button>
+            </Link>
           </div>
         ) : (
           <div className="bg-white shadow-2xl rounded-3xl overflow-hidden border border-pink-100">
@@ -123,20 +109,22 @@ export default function ManageProduct() {
                       className="hover:bg-pink-50 transition duration-200 border-b"
                     >
                       <td className="px-6 py-4">
-                        <Image width={100} height={100}
+                        <Image
+                          width={100}
+                          height={100}
                           src={product.pictureURL}
                           alt={product.toyName}
                           className="w-16 h-16 object-cover rounded-lg shadow"
                           unoptimized
                         />
                       </td>
-                      <td className="font-semibold text-gray-800">
+                      <td className="font-semibold text-gray-800 max-w-xs truncate">
                         {product.toyName}
                       </td>
-                      <td>৳{product.price}</td>
+                      <td className="font-medium">৳{product.price}</td>
                       <td>{product.availableQuantity} pcs</td>
                       <td>
-                        <span className="badge badge-warning text-white">
+                        <span className="badge badge-warning text-white font-bold">
                           {product.rating} ★
                         </span>
                       </td>
@@ -145,24 +133,38 @@ export default function ManageProduct() {
                           {product.category}
                         </span>
                       </td>
-                      <td className="text-center space-x-3">
-                        <button
-                          onClick={() => handleEdit(product._id)}
-                          className="btn btn-sm btn-outline btn-success"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(product._id)}
-                          disabled={deleting === product._id}
-                          className="btn btn-sm btn-outline btn-error"
-                        >
-                          {deleting === product._id ? (
-                            <span className="loading loading-spinner loading-xs"></span>
-                          ) : (
-                            "Delete"
-                          )}
-                        </button>
+
+                      {/* Actions: View, Edit, Delete */}
+                      <td className="text-center">
+                        <div className="flex justify-center gap-2 flex-wrap">
+                          {/* View Button */}
+                          <Link href={`/allProducts/${product._id}`}>
+                            <button className="btn btn-sm btn-outline btn-info tooltip" data-tip="View Details">
+                              View
+                            </button>
+                          </Link>
+
+                          {/* Edit Button */}
+                          <Link href={`/dashboard/update-product/${product._id}`}>
+                            <button className="btn btn-sm btn-outline btn-success tooltip" data-tip="Edit Product">
+                              Edit
+                            </button>
+                          </Link>
+
+                          {/* Delete Button */}
+                          <button
+                            onClick={() => handleDelete(product._id)}
+                            disabled={deleting === product._id}
+                            className="btn btn-sm btn-outline btn-error tooltip"
+                            data-tip="Delete Product"
+                          >
+                            {deleting === product._id ? (
+                              <span className="loading loading-spinner loading-xs"></span>
+                            ) : (
+                              "Delete"
+                            )}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
