@@ -1,7 +1,9 @@
+"use client"
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/Components/Navbar";
 import Footer from "@/Components/Footer";
+import AuthProvider from "./dashboard/component/Provider/AuthProvider/AuthProvider";
+import Header from "@/Components/Header/Header";
 
 
 const geistSans = Geist({
@@ -14,10 +16,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
-  title: "Lens Coaching",
-  description: "Renowned coaching in chittagong",
-};
+// export const metadata = {
+//   title: "Lens Coaching",
+//   description: "Renowned coaching in chittagong",
+// };
 
 export default function RootLayout({ children }) {
   return (
@@ -25,9 +27,12 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-       <Navbar></Navbar>
-        {children}
-        <Footer/>
+        <AuthProvider>
+          <Header></Header>
+          {children}
+          <Footer />
+        </AuthProvider>
+
       </body>
     </html>
   );
