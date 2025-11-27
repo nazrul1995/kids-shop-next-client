@@ -7,7 +7,7 @@ export default function HomeProducts() {
 const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("https://kids-shop-project.vercel.app/popular-products")
+    fetch("http://localhost:5000/popular-products")
       .then(r => r.json())
       .then(setData);
   }, []);

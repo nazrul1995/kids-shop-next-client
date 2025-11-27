@@ -7,7 +7,7 @@ export default function AllProducts() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("https://kids-shop-project.vercel.app/products")
+    fetch("http://localhost:5000/products")
       .then((r) => r.json())
       .then(setData);
   }, []);
