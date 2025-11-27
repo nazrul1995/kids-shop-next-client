@@ -9,7 +9,7 @@ export default function Sidebar() {
       <ul className="space-y-4">
         <li><Link href="/dashboard">Dashboard</Link></li>
         <li><Link href="/dashboard/add-product">Add Product</Link></li>
-        <li><Link href="/dashboard/my-products">My Products</Link></li>
+        <li><Link href="/dashboard/manage-product">My Products</Link></li>
       </ul>
     </div>
   );

@@ -1,8 +1,10 @@
+'use client'
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
 
 export default function ProductCard({product}) {
+  console.log(product)
   return (
      <div className="card col-span-12 md:col-span-6 lg:col-span-4 bg-linear-to-br from-pink-100 via-yellow-100 to-blue-100 shadow-xl rounded-2xl border-2 border-pink-200 hover:shadow-2xl hover:-translate-y-2 transition-transform duration-300 h-full flex flex-col">
       {/* Thumbnail */}
@@ -60,7 +62,7 @@ export default function ProductCard({product}) {
           <span className="text-xl font-bold text-pink-700">
             {product.price}৳
           </span>
-         <Link href={`/product/${product.toyId}`} className="btn btn-sm bg-pink-400 hover:bg-pink-500 text-white border-none rounded-full px-5 shadow-md">View More 🎁</Link> 
+         <Link href={`/allProducts/${product._id}`} className="btn btn-sm bg-pink-400 hover:bg-pink-500 text-white border-none rounded-full px-5 shadow-md">View More 🎁</Link> 
         </div>
       </div>
     </div>
