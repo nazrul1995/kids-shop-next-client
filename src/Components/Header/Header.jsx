@@ -11,9 +11,10 @@ import Swal from "sweetalert2";
 export default function Header() {
   const { user, LogOutUser } = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const pathname = usePathname();
 
-  const handleLogOut = () => {
+const handleLogOut = () => {
     LogOutUser()
       .then(() => {
         Swal.fire({
@@ -32,7 +33,6 @@ export default function Header() {
       });
   };
 
-  // ACTIVE LINK FUNCTION
   const navLinkClass = (path) =>
     `block mx-4 text-lg font-medium transition-colors duration-300 ${
       pathname === path ? "text-pink-600" : "text-gray-700 hover:text-pink-500"
@@ -48,28 +48,16 @@ export default function Header() {
         🌟 About
       </Link>
 
-      <Link className={navLinkClass("/products")} href="/products" onClick={() => setMenuOpen(false)}>
+      <Link className={navLinkClass("/allProducts")} href="/allProducts" onClick={() => setMenuOpen(false)}>
         🎁 All Products
       </Link>
 
       {user && (
-        <Link
-          className={navLinkClass("/profile")}
-          href="/profile"
-          onClick={() => setMenuOpen(false)}
-        >
-          💖 Profile
-        </Link>
-      )}
-
-      {user && (
-        <Link
-          className={navLinkClass("/wishlist")}
-          href="/wishlist"
-          onClick={() => setMenuOpen(false)}
-        >
-          💖 Wishlist
-        </Link>
+        <>
+          <Link className={navLinkClass("/dashboard")} href="/dashboard" onClick={() => setMenuOpen(false)}>
+            💖 Dashboard
+          </Link>
+        </>
       )}
     </>
   );
@@ -79,10 +67,7 @@ export default function Header() {
       <div className="w-11/12 mx-auto flex justify-between items-center py-3 md:py-4">
 
         {/* Logo */}
-        <Link
-          href="/"
-          className="text-2xl md:text-4xl font-extrabold text-pink-700 tracking-wide"
-        >
+        <Link href="/" className="text-2xl md:text-4xl font-extrabold text-pink-700 tracking-wide">
           🎠 ToyLand
         </Link>
 
@@ -90,34 +75,65 @@ export default function Header() {
         <nav className="hidden lg:flex items-center gap-2">{links}</nav>
 
         {/* Right Section */}
-        <div className="flex items-center gap-3 sm:gap-5">
+        <div className="flex items-center gap-3 sm:gap-5 relative">
+
+          {/* ===================== USER DROPDOWN ===================== */}
           {user ? (
-            <div className="relative group">
-              <Image width={20} height={20}
+            <div className="relative">
+              <Image
+                width={20}
+                height={20}
                 className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-pink-300 cursor-pointer shadow-md"
                 src={user.photoURL || "https://i.ibb.co/rpFhYw2/default-avatar.jpg"}
                 alt="user"
                 unoptimized
+                onClick={() => setDropdownOpen(!dropdownOpen)}
               />
-              <div className="absolute top-12 left-1/2 -translate-x-1/2 bg-black text-white text-sm px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap shadow-lg z-20">
-                {user.displayName || "No Name"}
-              </div>
+
+              {/* DROPDOWN MENU */}
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-3 w-48 bg-white rounded shadow-lg py-2 z-50">
+
+                  {/* User Info */}
+                  <div className="px-4 py-2 border-b">
+                    <p className="font-semibold">{user.displayName || "Unknown User"}</p>
+                    <p className="text-sm text-gray-600">{user.email}</p>
+                  </div>
+
+                  <Link
+                    href="/dashboard/add-product"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    ➕ Add Product
+                  </Link>
+
+                  <Link
+                    href="/dashboard/manage-product"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    📦 Manage Products
+                  </Link>
+
+                  <button
+                    onClick={handleLogOut}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+                  >
+                    🚪 Logout
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <RegexIcon size={30} className="text-gray-700" />
           )}
 
-          {user ? (
-            <button
-              onClick={handleLogOut}
-              className="hidden sm:block btn bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-5 py-2 shadow-md transition-transform transform hover:scale-105"
-            >
-              Log Out
-            </button>
-          ) : (
+          {/* If not logged in – Login Button */}
+          {!user && (
             <Link
               href="/dashboard/login"
-              className="hidden sm:block btn bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-5 py-2 shadow-md transition-transform transform hover:scale-105"
+              className="hidden sm:block btn bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-5 py-2 shadow-md"
             >
               Log In
             </Link>

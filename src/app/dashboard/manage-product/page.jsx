@@ -6,17 +6,13 @@ import Image from "next/image";
 import Sidebar from "../component/Sidebar";
 import Swal from "sweetalert2";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 export default function ManageProduct() {
   const { user } = useContext(AuthContext);
-   if(!user){
-      redirect('/dashboard/login')
-     }
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(null);
-  
+
   const fetchMyProducts = async () => {
     if (!user?.email) return;
 

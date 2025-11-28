@@ -7,11 +7,8 @@ import { redirect } from "next/navigation";
 
 
 export default function Dashboard() {
- const {user} = useContext(AuthContext)
- if(!user){
-  redirect('/dashboard/login')
- }
- return (
+  const {user} = useContext(AuthContext)
+  return (
     <div className="flex">
       <Sidebar/>
 
