@@ -1,10 +1,17 @@
 "use client";
 
+import { useContext } from "react";
 import Sidebar from "./component/Sidebar";
+import { AuthContext } from "./component/Provider/AuthContext/AuthContext";
+import { redirect } from "next/navigation";
 
 
 export default function Dashboard() {
-  return (
+ const {user} = useContext(AuthContext)
+ if(!user){
+  redirect('/dashboard/login')
+ }
+ return (
     <div className="flex">
       <Sidebar/>
 
